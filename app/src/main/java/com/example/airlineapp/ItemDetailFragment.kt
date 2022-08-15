@@ -28,8 +28,7 @@ class ItemDetailFragment : Fragment() {
     lateinit var itemDetailTextView: TextView
     private var toolbarLayout: CollapsingToolbarLayout? = null
 
-    private var _binding: FragmentItemDetailBinding? = null
-
+private var _binding: FragmentItemDetailBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -62,8 +61,8 @@ class ItemDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentItemDetailBinding.inflate(inflater, container, false)
-        val rootView = binding.root
+      _binding = FragmentItemDetailBinding.inflate(inflater, container, false)
+      val rootView = binding.root
 
         toolbarLayout = binding.toolbarLayout
         itemDetailTextView = binding.itemDetail
@@ -75,11 +74,15 @@ class ItemDetailFragment : Fragment() {
     }
 
     private fun updateContent() {
-        toolbarLayout?.title = item?.content
+        toolbarLayout?.title = item?.airline_name
 
         // Show the placeholder content as text in a TextView.
         item?.let {
-            itemDetailTextView.text = it.details
+            itemDetailTextView.text = it.airline_name
+            itemDetailTextView.text = it.country
+            itemDetailTextView.text = it.slogan
+            itemDetailTextView.text = it.head_quarters
+            itemDetailTextView.text = it.established
         }
     }
 
@@ -91,7 +94,7 @@ class ItemDetailFragment : Fragment() {
         const val ARG_ITEM_ID = "item_id"
     }
 
-    override fun onDestroyView() {
+override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }

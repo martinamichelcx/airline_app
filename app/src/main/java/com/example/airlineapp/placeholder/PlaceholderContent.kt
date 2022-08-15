@@ -21,7 +21,20 @@ object PlaceholderContent {
      */
     val ITEM_MAP: MutableMap<String, PlaceholderItem> = HashMap()
 
-    private val COUNT = 25
+    init
+    {
+        //adding sample items to the list
+        addItem(PlaceholderItem( "1", "Quatar Airways", "Quatar", "Going Places Together",
+            "Qatar Airways Towers, Doha, Qatar",
+            "www.qatarairways.com",
+            "1994"))
+        addItem(
+            PlaceholderItem("2", "Singapore Airlines", "Singapore", "A Great Way to Fly",
+                "Airline House, 25 Airline Road, Singapore 819829",
+                "www.singaporeair.com",
+                "1947"))
+    }
+   /* private val COUNT = 25
 
     init {
         // Add some sample items.
@@ -29,13 +42,13 @@ object PlaceholderContent {
             addItem(createPlaceholderItem(i))
         }
     }
-
+*/
     private fun addItem(item: PlaceholderItem) {
         ITEMS.add(item)
         ITEM_MAP.put(item.id, item)
     }
 
-    private fun createPlaceholderItem(position: Int): PlaceholderItem {
+  /*  private fun createPlaceholderItem(position: Int): PlaceholderItem {
         return PlaceholderItem(position.toString(), "Item " + position, makeDetails(position))
     }
 
@@ -47,11 +60,12 @@ object PlaceholderContent {
         }
         return builder.toString()
     }
-
+*/
     /**
      * A placeholder item representing a piece of content.
      */
-    data class PlaceholderItem(val id: String, val content: String, val details: String) {
-        override fun toString(): String = content
+    data class PlaceholderItem(val id: String, val airline_name: String, val country: String, val slogan: String,
+    val head_quarters: String, val website: String, val established: String ) {
+        override fun toString(): String = airline_name
     }
 }

@@ -54,8 +54,7 @@ class ItemListFragment : Fragment() {
         false
     }
 
-    private var _binding: FragmentItemListBinding? = null
-
+private var _binding: FragmentItemListBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -65,8 +64,8 @@ class ItemListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentItemListBinding.inflate(inflater, container, false)
-        return binding.root
+      _binding = FragmentItemListBinding.inflate(inflater, container, false)
+      return binding.root
 
     }
 
@@ -138,15 +137,15 @@ class ItemListFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-            val binding = ItemListContentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return ViewHolder(binding)
+    val binding = ItemListContentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    return ViewHolder(binding)
 
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
             holder.idView.text = item.id
-            holder.contentView.text = item.content
+            holder.contentView.text = item.airline_name
 
             with(holder.itemView) {
                 tag = item
@@ -186,14 +185,14 @@ class ItemListFragment : Fragment() {
 
         override fun getItemCount() = values.size
 
-        inner class ViewHolder(binding: ItemListContentBinding) : RecyclerView.ViewHolder(binding.root) {
-            val idView: TextView = binding.idText
-            val contentView: TextView = binding.content
-        }
+    inner class ViewHolder(binding: ItemListContentBinding) : RecyclerView.ViewHolder(binding.root) {
+      val idView: TextView = binding.idText
+      val contentView: TextView = binding.content
+    }
 
     }
 
-    override fun onDestroyView() {
+override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
