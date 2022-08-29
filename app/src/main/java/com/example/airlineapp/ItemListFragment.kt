@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +14,16 @@ import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.airlineapp.placeholder.PlaceholderContent;
 import com.example.airlineapp.databinding.FragmentItemListBinding
 import com.example.airlineapp.databinding.ItemListContentBinding
+import com.example.airlineapp.databinding.CardLayout1Binding
+import retrofit2.Response
+import retrofit2.Call
+import retrofit2.Callback
+
 
 /**
  * A Fragment representing a list of Pings. This fragment
@@ -28,6 +35,8 @@ import com.example.airlineapp.databinding.ItemListContentBinding
  */
 
 class ItemListFragment : Fragment() {
+
+    private lateinit var API_Interface: Call<List<Airlines>>
 
     /**
      * Method to intercept global key events in the
@@ -58,13 +67,42 @@ private var _binding: FragmentItemListBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
+    private var layoutManager: RecyclerView.LayoutManager? = null
+    private var adapter: RecyclerAdapter? = null
+    //private var recAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+    //
+
+
+        //
 
       _binding = FragmentItemListBinding.inflate(inflater, container, false)
+
+        layoutManager=LinearLayoutManager(requireContext())
+
+
+        adapter=RecyclerAdapter(requireContext())
+
+
+
+        setupRecyclerView(binding.itemList)
+
+        API_Interface= apiInterface.create().getAirlines()
+
+        API_Interface.enqueue(object : Callback<List<Airlines>>{
+            override fun onResponse(call: Call<List<Airlines>>, response: Response<List<Airlines>>) {
+                Log.e("http","success")
+                if(response?.body() != null)
+                    adapter?.setAirlineList(response.body()!!)
+
+            }
+
+            override fun onFailure(call: Call<List<Airlines>>, t: Throwable) {
+Log.e("http","failed")            }
+        })
       return binding.root
 
     }
@@ -119,13 +157,18 @@ private var _binding: FragmentItemListBinding? = null
         recyclerView: RecyclerView,
         onClickListener: View.OnClickListener,
         onContextClickListener: View.OnContextClickListener
+    ){}
+    private fun setupRecyclerView(
+        recyclerView: RecyclerView
     ) {
 
-        recyclerView.adapter = SimpleItemRecyclerViewAdapter(
-            PlaceholderContent.ITEMS,
-            onClickListener,
-            onContextClickListener
-        )
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = RecyclerAdapter(requireContext())
+//        recyclerView.adapter = SimpleItemRecyclerViewAdapter(
+//            PlaceholderContent.ITEMS,
+//            onClickListener,
+//            onContextClickListener
+//        )
     }
 
     class SimpleItemRecyclerViewAdapter(
