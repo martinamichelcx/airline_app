@@ -19,20 +19,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.airlineapp.placeholder.PlaceholderContent;
 import com.example.airlineapp.databinding.FragmentItemListBinding
 import com.example.airlineapp.databinding.ItemListContentBinding
-import com.example.airlineapp.databinding.CardLayout1Binding
 import retrofit2.Response
 import retrofit2.Call
 import retrofit2.Callback
 
 
-/**
- * A Fragment representing a list of Pings. This fragment
- * has different presentations for handset and larger screen devices. On
- * handsets, the fragment presents a list of items, which when touched,
- * lead to a {@link ItemDetailFragment} representing
- * item details. On larger screens, the Navigation controller presents the list of items and
- * item details side-by-side using two vertical panes.
- */
+
 
 class ItemListFragment : Fragment() {
 
@@ -69,39 +61,34 @@ private var _binding: FragmentItemListBinding? = null
     private val binding get() = _binding!!
     private var layoutManager: RecyclerView.LayoutManager? = null
     private var adapter: RecyclerAdapter? = null
-    //private var recAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-    //
-
-
-        //
-
       _binding = FragmentItemListBinding.inflate(inflater, container, false)
 
         layoutManager=LinearLayoutManager(requireContext())
 
 
-        adapter=RecyclerAdapter(requireContext())
-
-
-
-        setupRecyclerView(binding.itemList)
 
         API_Interface= apiInterface.create().getAirlines()
 
         API_Interface.enqueue(object : Callback<List<Airlines>>{
             override fun onResponse(call: Call<List<Airlines>>, response: Response<List<Airlines>>) {
                 Log.e("http","success")
-                if(response?.body() != null)
-                    adapter?.setAirlineList(response.body()!!)
+                println("hi im here")
+                if(response.body() != null){
+                    setupRecyclerView(response.body()?.let { ArrayList(it) })
+//                    adapter?.setAirlineList(response.body()!!)
+                    println(adapter?.airlinesList)
+                }
 
             }
 
             override fun onFailure(call: Call<List<Airlines>>, t: Throwable) {
-Log.e("http","failed")            }
+Log.e("http","failed")
+            }
         })
       return binding.root
 
@@ -159,16 +146,11 @@ Log.e("http","failed")            }
         onContextClickListener: View.OnContextClickListener
     ){}
     private fun setupRecyclerView(
-        recyclerView: RecyclerView
+        list: ArrayList<Airlines>?
     ) {
 
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = RecyclerAdapter(requireContext())
-//        recyclerView.adapter = SimpleItemRecyclerViewAdapter(
-//            PlaceholderContent.ITEMS,
-//            onClickListener,
-//            onContextClickListener
-//        )
+        binding.itemList.layoutManager = layoutManager
+        binding.itemList.adapter = RecyclerAdapter(requireContext(),list)
     }
 
     class SimpleItemRecyclerViewAdapter(
